@@ -1,0 +1,230 @@
+Bạn copy – paste đoạn code sau bỏ vào functions.php nha!
+
+// Thêm icon image vào tab trong theme Flatsome
+function rflatsome_ux_builder_template( $path ) {
+    ob_start();
+    include get_template_directory() . '/inc/builder/shortcodes/templates/' . $path;
+    return ob_get_clean();
+}
+//
+function rflatsome_ux_builder_thumbnail( $name ) {
+    return get_template_directory_uri() . '/inc/builder/shortcodes/thumbnails/' . $name . '.svg';
+}
+//
+function giuseart_convert_name($str) {
+            $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+            $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+            $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+            $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+            $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+            $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+            $str = preg_replace("/(đ)/", 'd', $str);
+            $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+            $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+            $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/", 'I', $str);
+            $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+            $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+            $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+            $str = preg_replace("/(Đ)/", 'D', $str);
+            $str = preg_replace("/(\“|\”|\‘|\’|\,|\!|\&|\;|\@|\#|\%|\~|`|\=|\_|\'|\]|\[|\}|\{|\)|\(|\+|\^)/", '-', $str);
+            $str = preg_replace("/( )/", '-', $str);
+            return $str;
+        }
+function rdev_ux_builder_element(){
+    add_ux_builder_shortcode('giuseart_tabs', array(
+        'type' => 'container',
+        'name' => __( 'Tab with Images' ),
+        'image' => '',
+        'category' => __( 'Content' ),
+        'template' => rflatsome_ux_builder_template( 'tabgroup.html' ),
+        'tools' => 'shortcodes/tabgroup/tabgroup.tools.html',
+        'info' => '{{ title }}',
+        'allow' => array( 'giuseart_tab' ),
+ 
+        'children' => array(
+            'draggable' => false,
+            'addable_spots' => array( 'center' ),
+        ),
+ 
+        'toolbar' => array(
+            'show_children_selector' => true,
+            'show_on_child_active' => true,
+        ),
+ 
+        'presets' => array(
+            array(
+                'name' => __( 'Default' ),
+                'content' => '
+                [giuseart_tabs title="Tab Title"]
+                    [giuseart_tab title="Tab 1 Title"][/giuseart_tab]
+                    [giuseart_tab title="Tab 2 Title"][/giuseart_tab]
+                    [giuseart_tab title="Tab 3 Title"][/giuseart_tab]
+                [/giuseart_tabs]
+            '
+            ),
+        ),
+ 
+        'options' => array(
+ 
+            'title' => array(
+                'type' => 'textfield',
+                'heading' => __( 'Title' ),
+                'default' => __( '' ),
+            ),
+ 
+            'style' => array(
+                'type' => 'select',
+                'heading' => __( 'Style' ),
+                'default' => 'line',
+                'options' => require( get_template_directory(). '/inc/builder/shortcodes/values/nav-styles.php' ),
+            ),
+ 
+            'type' => array(
+                'type' => 'select',
+                'heading' => __( 'Type' ),
+                'default' => 'horizontal',
+                'options' => array(
+                    'horizontal' => 'Horizontal',
+                    'vertical' => 'Vertical',
+                )
+            ),
+ 
+            'nav_style' => array(
+                'type' => 'radio-buttons',
+                'heading' => 'Nav Style',
+                'default' => 'uppercase',
+                'options' => require( get_template_directory(). '/inc/builder/shortcodes/values/nav-types-radio.php' ),
+            ),
+ 
+            'nav_size' => array(
+                'type' => 'radio-buttons',
+                'heading' => __( 'Size' ),
+                'default' => 'medium',
+                'options' => require( get_template_directory(). '/inc/builder/shortcodes/values/text-sizes.php' ),
+            ),
+ 
+            'align' => array(
+                'type' => 'radio-buttons',
+                'heading' => 'Tabs Align',
+                'default' => 'left',
+                'options' => require( get_template_directory(). '/inc/builder/shortcodes/values/align-radios.php' ),
+            ),
+            'bahavior_group' => array(
+                'type' => 'group',
+                'heading' => __( 'Behavior' ),
+                'options' => array(
+                    'event' => array(
+                        'type'    => 'radio-buttons',
+                        'heading' => __( 'Activate' ),
+                        'description' => 'On hover takes effect in non-edit mode.',
+                        'default' => '',
+                        'options' => array(
+                            ''      => array( 'title' => 'On click' ),
+                            'hover' => array( 'title' => 'On hover' ),
+                        ),
+                    ),
+                ),
+            ),
+            'advanced_options' => require( get_template_directory(). '/inc/builder/shortcodes/commons/advanced.php'),
+        ),
+    ));
+    add_ux_builder_shortcode( 'giuseart_tab', array(
+        'type' => 'container',
+        'name' => __( ' GiuseArt Tab Panel' ),
+        'template' => rflatsome_ux_builder_template('tab.html' ),
+        'info' => '{{ title }}',
+        'require' => array( 'giuseart_tabs' ),
+        'hidden' => true,
+        'wrap' => false,
+ 
+        'options' => array(
+            'title' => array(
+                'type' => 'textfield',
+                'heading' => __( 'Title' ),
+                'default' => __( 'Tab Title' ),
+                'auto_focus' => true,
+            ),
+           'img'    => array(
+                'type'    => 'image',
+                'heading' => 'Icon',
+                'default' => '',
+            ),          
+ 
+        ),
+    ) );
+}
+add_action('ux_builder_setup', 'rdev_ux_builder_element');
+ 
+function giuseart_tab_func($params, $content = null, $tag = ''){
+    $GLOBALS['tabs'] = array();
+    $GLOBALS['tab_count'] = 0;
+    $i = 1;
+    extract(shortcode_atts(array(
+        'id' => 'panel-'.rand(),
+        'title' => '',
+        'style' => 'line',
+        'align' => 'left',
+        'class' => '',
+        'visibility' => '',
+        'type' => '', // horizontal, vertical
+        'nav_style' => 'uppercase',
+        'nav_size' => 'normal',
+        'history' => 'false',
+        'event' => '',
+    ), $params));
+ 
+    if($tag == 'giuseart_tabs_vertical'){
+        $type = 'vertical';
+    }
+    $content = do_shortcode( $content );
+    $wrapper_class[] = 'tabbed-content';
+    if ( $class ) $wrapper_class[] = $class;
+    if ( $visibility ) $wrapper_class[] = $visibility;
+    $classes[] = 'nav';
+    if($style) $classes[] = 'nav-'.$style;
+    if($type == 'vertical') $classes[] = 'nav-vertical';
+    if($nav_style) $classes[] = 'nav-'.$nav_style;
+    if($nav_size) $classes[] = 'nav-size-'.$nav_size;
+    if($align) $classes[] = 'nav-'.$align;
+    if($event) $classes[] = 'active-on-' . $event;
+    $classes = implode(' ', $classes);
+    $return = '';
+    if( is_array( $GLOBALS['tabs'] )){
+ 
+        foreach( $GLOBALS['tabs'] as $key => $tab ){
+            if($tab['title']) $id = flatsome_to_dashed($tab['title']);
+            $active = $key == 0 ? ' active' : ''; // Set first tab active by default.
+            $tabs[] = '<li class="tab'.$active.' has-icon" data-code="'.giuseart_convert_name($tab['title']).'"><a href="#tab_'.giuseart_convert_name($id).'">'.flatsome_get_image( $tab['img'], 'thumbnail').'<h3>'.$tab['title'].'</h3></a></li>'; //flatsome_get_image( $tab['img'], 'thumbnail')
+            $panes[] = '<div class="panel'.$active.' entry-content" id="tab_'.$id.'">'.do_shortcode( $tab['content'] ).'</div>';
+            $i++;
+        }
+        if($title) $title = '<h4 class="uppercase text-'.$align.'">'.$title.'</h4>';
+        $return = '
+        <div class="'.implode(' ', $wrapper_class).' giuseart_tabs">
+            '.$title.'
+            <ul class="'.$classes.'">'.implode( "\n", $tabs ).'</ul><div class="tab-panels">'.implode( "\n", $panes ).'</div></div>';
+    }
+    return $return;
+}
+function giuseart_ux_tab( $params, $content = null) {
+    extract(shortcode_atts(array(
+        'title' => '',
+        'title_small' => '',
+        'img' => '',
+    ), $params));
+ 
+    $x = $GLOBALS['tab_count'];
+    $GLOBALS['tabs'][$x] = array(
+        'img' => $img,
+        'title' => sprintf( $title, $GLOBALS['tab_count'] ),
+        'content' =>  $content
+    );
+    $GLOBALS['tab_count']++;
+}
+
+add_shortcode('giuseart_tabs', 'giuseart_tab_func');
+add_shortcode('giuseart_tabs_vertical', 'giuseart_tab_func');
+add_shortcode('giuseart_tab', 'giuseart_ux_tab' );
+
+
+
